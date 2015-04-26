@@ -18,12 +18,14 @@ import android.os.Environment;
 
 import android.view.View;
 
- 
+
 public class MainActivity extends Activity {
  
 	private MapView mapView;
 	private TileCache tileCache;
 	private TileRendererLayer tileRendererLayer;
+	
+	private static final String MAPFILE = "/maps/elsalvador.map";
  
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,10 +47,10 @@ public class MainActivity extends Activity {
 		mapView.getMapZoomControls().setZoomLevelMin((byte)10);
 		mapView.getMapZoomControls().setZoomLevelMax((byte)30);
  
-		String filepath = Environment.getExternalStorageDirectory().getPath() + "/maps/central-america.map";
+		//String filepath = Environment.getExternalStorageDirectory().getPath() + "/maps/elsalvador.map";
 		// tile renderer layer using internal render theme
-		tileRendererLayer = new TileRendererLayer(tileCache,mapView.getModel().mapViewPosition, true, AndroidGraphicFactory.INSTANCE);
-		tileRendererLayer.setMapFile(new File(filepath));
+		tileRendererLayer = new TileRendererLayer(tileCache, this.mapView.getModel().mapViewPosition, false, true, AndroidGraphicFactory.INSTANCE);
+		tileRendererLayer.setMapFile(getMapFile());
 		tileRendererLayer.setXmlRenderTheme(InternalRenderTheme.OSMARENDER);
  
 		// only once a layer is associated with a mapView the rendering starts
@@ -82,4 +84,9 @@ public class MainActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	private File getMapFile() {
+        File file = new File(Environment.getExternalStorageDirectory(), MAPFILE);
+        return file;
+    }
 }
