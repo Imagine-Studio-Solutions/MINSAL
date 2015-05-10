@@ -44,10 +44,9 @@ public class MainActivity extends Activity {
 				this.mapView.getModel().frameBufferModel.getOverdrawFactor());
  
 		mapView.getModel().mapViewPosition.setZoomLevel((byte) 15);
-		mapView.getMapZoomControls().setZoomLevelMin((byte)10);
-		mapView.getMapZoomControls().setZoomLevelMax((byte)30);
+		mapView.getMapZoomControls().setZoomLevelMin((byte) 10);
+		mapView.getMapZoomControls().setZoomLevelMax((byte) 30);
  
-		//String filepath = Environment.getExternalStorageDirectory().getPath() + "/maps/elsalvador.map";
 		// tile renderer layer using internal render theme
 		tileRendererLayer = new TileRendererLayer(tileCache, this.mapView.getModel().mapViewPosition, false, true, AndroidGraphicFactory.INSTANCE);
 		tileRendererLayer.setMapFile(getMapFile());
@@ -55,15 +54,14 @@ public class MainActivity extends Activity {
  
 		// only once a layer is associated with a mapView the rendering starts
 		mapView.getLayerManager().getLayers().add(tileRendererLayer);
- 
-		//mapView.setClickable(true);
+
 		mapView.setBuiltInZoomControls(true);
 		mapView.getMapScaleBar().setVisible(true);
  
-		mapView.getModel().mapViewPosition.setCenter(new LatLong(13.88, -89.20));//punto inical del mapa
+		mapView.getModel().mapViewPosition.setCenter(new LatLong(13.682269, -89.203518));//punto inical del mapa
  
-		//MyMarker marker = new MyMarker(this, new LatLong(43.385833, -8.406389), AndroidGraphicFactory.convertToBitmap(getResources().getDrawable(R.drawable.ic_launcher)), 0, 0);
-		//mapView.getLayerManager().getLayers().add(marker);	
+		MyMarker marker = new MyMarker(this, new LatLong(13.682269, -89.203518), AndroidGraphicFactory.convertToBitmap(getResources().getDrawable(R.drawable.green_house)), 0, 0);
+		mapView.getLayerManager().getLayers().add(marker);	
 	}
  
 	@Override
