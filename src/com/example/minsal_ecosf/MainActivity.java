@@ -1,11 +1,15 @@
 package com.example.minsal_ecosf;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import java.io.File;
- 
+
 import org.mapsforge.core.model.LatLong;
 import org.mapsforge.map.android.graphics.AndroidGraphicFactory;
 import org.mapsforge.map.android.util.AndroidUtil;
@@ -17,6 +21,11 @@ import org.mapsforge.map.rendertheme.InternalRenderTheme;
 import android.os.Environment;
 
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 
 public class MainActivity extends Activity {
@@ -25,8 +34,16 @@ public class MainActivity extends Activity {
 	private TileCache tileCache;
 	private TileRendererLayer tileRendererLayer;
 	
+	//---------------------Menu lateral-------------------------
+	private DrawerLayout drawerLayout;
+	private ListView drawer;
+	private ActionBarDrawerToggle toggle;
+	private static final String[] opciones = {"Datos Generales", "Infomación de Vivienda", "Riesgo o Vulnerabilidad","BBLB"};
+	//----------------------------------------------------------
+	
 	private static final String MAPFILE = "/maps/elsalvador.map";
  
+	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -61,7 +78,59 @@ public class MainActivity extends Activity {
 		mapView.getModel().mapViewPosition.setCenter(new LatLong(13.682269, -89.203518));//punto inical del mapa
  
 		MyMarker marker = new MyMarker(this, new LatLong(13.682269, -89.203518), AndroidGraphicFactory.convertToBitmap(getResources().getDrawable(R.drawable.green_house)), 0, 0);
-		mapView.getLayerManager().getLayers().add(marker);	
+		mapView.getLayerManager().getLayers().add(marker);
+		
+		//-------------------------------------Menu lateral-----------------------------------
+		// Rescatamos el Action Bar y activamos el boton Home
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setHomeButtonEnabled(true);
+
+		// Declarar e inicializar componentes para el Navigation Drawer
+		drawer = (ListView) findViewById(R.id.drawer);
+		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+		// Declarar adapter y eventos al hacer click
+		drawer.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, opciones));
+
+		drawer.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				Toast.makeText(MainActivity.this, "Seleccionó: " + opciones[arg2], Toast.LENGTH_SHORT).show();
+				drawerLayout.closeDrawers();
+
+			}
+		});
+
+		// Sombra del panel Navigation Drawer
+		drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+
+		// Integracion boton oficial
+	
+				
+				
+		toggle = new ActionBarDrawerToggle(
+				this, // Activity
+				drawerLayout, // Panel del Navigation Drawer
+				R.drawable.ic_drawer, // Icono que va a utilizar
+				R.string.app_name, // Descripcion al abrir el drawer
+				R.string.hello_world // Descripcion al cerrar el drawer
+				){
+			
+					public void onDrawerClosed(View view) {
+						// Drawer cerrado
+						getActionBar().setTitle("Bienvenido");					
+						invalidateOptionsMenu();
+					}
+		
+					public void onDrawerOpened(View drawerView) {
+						// Drawer abierto
+						getActionBar().setTitle("Menu");
+						invalidateOptionsMenu(); 
+					}
+				};
+
+		drawerLayout.setDrawerListener(toggle);
+		//-------------------------------------------------------------------------
 	}
  
 	@Override
@@ -73,18 +142,22 @@ public class MainActivity extends Activity {
  
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
+		if (toggle.onOptionsItemSelected(item)) {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	// Activamos el toggle con el icono
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		toggle.syncState();
 	}
 	
 	private File getMapFile() {
         File file = new File(Environment.getExternalStorageDirectory(), MAPFILE);
         return file;
     }
+
 }
