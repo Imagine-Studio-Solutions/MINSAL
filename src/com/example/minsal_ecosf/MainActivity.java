@@ -27,6 +27,10 @@ import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
+import android.content.Context;
+import android.location.LocationListener;
+import android.location.LocationManager;
+
 
 public class MainActivity extends Activity {
  
@@ -75,11 +79,10 @@ public class MainActivity extends Activity {
 		mapView.setBuiltInZoomControls(true);
 		mapView.getMapScaleBar().setVisible(true);
  
-		mapView.getModel().mapViewPosition.setCenter(new LatLong(13.682269, -89.203518));//punto inical del mapa
+		mapView.getModel().mapViewPosition.setCenter(new LatLong(13.8330795,-89.9347687));//punto inical del mapa
  
-		MyMarker marker = new MyMarker(this, new LatLong(13.682269, -89.203518), AndroidGraphicFactory.convertToBitmap(getResources().getDrawable(R.drawable.green_house)), 0, 0);
+		MyMarker marker = new MyMarker(this, new LatLong(13.8330795,-89.9347687), AndroidGraphicFactory.convertToBitmap(getResources().getDrawable(R.drawable.pointer4)), 0, 0);
 		mapView.getLayerManager().getLayers().add(marker);
-		
 		//-------------------------------------Menu lateral-----------------------------------
 		// Rescatamos el Action Bar y activamos el boton Home
 		getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -105,9 +108,6 @@ public class MainActivity extends Activity {
 		drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
 		// Integracion boton oficial
-	
-				
-				
 		toggle = new ActionBarDrawerToggle(
 				this, // Activity
 				drawerLayout, // Panel del Navigation Drawer
@@ -130,7 +130,12 @@ public class MainActivity extends Activity {
 				};
 
 		drawerLayout.setDrawerListener(toggle);
-		//-------------------------------------------------------------------------
+		//---------------------------------GPS----------------------------------
+		/* usando la clase LocationManager para obtener informacion GPS*/
+		LocationManager mlocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+		LocationListener mlocListener = new MyLocationListener(this, marker);
+		mlocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 0, 0, mlocListener);
+		//----------------------------------------------------------------------
 	}
  
 	@Override
