@@ -8,7 +8,11 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import java.io.File;
+import java.util.ArrayList;
+
+//import menuLateral.NewAdapter;
 
 import org.mapsforge.core.model.LatLong;
 import org.mapsforge.map.android.graphics.AndroidGraphicFactory;
@@ -21,11 +25,8 @@ import org.mapsforge.map.rendertheme.InternalRenderTheme;
 import android.os.Environment;
 
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.ExpandableListView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
 import android.content.Context;
 import android.location.LocationListener;
@@ -40,9 +41,13 @@ public class MainActivity extends Activity {
 	
 	//---------------------Menu lateral-------------------------
 	private DrawerLayout drawerLayout;
-	private ListView drawer;
+	//private ListView drawer;
+	private ExpandableListView drawerList;
 	private ActionBarDrawerToggle toggle;
-	private static final String[] opciones = {"Datos Generales", "Infomación de Vivienda", "Riesgo o Vulnerabilidad","BBLB"};
+	//private static final String[] opciones = {"Datos Generales", "Infomación de Vivienda", "Riesgo o Vulnerabilidad","BBLB"};
+	ArrayList<String> groupItem = new ArrayList<String>();
+	ArrayList<Object> childItem = new ArrayList<Object>();
+	ArrayList<String> child;
 	//----------------------------------------------------------
 	
 	private static final String MAPFILE = "/maps/elsalvador.map";
@@ -89,20 +94,32 @@ public class MainActivity extends Activity {
 		getActionBar().setHomeButtonEnabled(true);
 
 		// Declarar e inicializar componentes para el Navigation Drawer
-		drawer = (ListView) findViewById(R.id.drawer);
+		setGroupData();
+		setChildGroupData();	
+				
+		//drawer = (ListView) findViewById(R.id.drawer);
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
+		
+		
+		drawerList = (ExpandableListView) findViewById(R.id.drawer);
+		drawerList.setAdapter(new NewAdapter(this, groupItem, childItem));
+		
+		//Esto queda pendiente porque me está dando problemas cuando se da click ¬¬
+		
+		//drawerList.setOnChildClickListener(this);
+	
+		
 		// Declarar adapter y eventos al hacer click
-		drawer.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, opciones));
+		//drawer.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, opciones));
 
-		drawer.setOnItemClickListener(new OnItemClickListener() {
+		/*drawerList.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				Toast.makeText(MainActivity.this, "Seleccionó: " + opciones[arg2], Toast.LENGTH_SHORT).show();
+			//	Toast.makeText(MainActivity.this, "Seleccionó: " + opciones[arg2], Toast.LENGTH_SHORT).show();
 				drawerLayout.closeDrawers();
 
 			}
-		});
+		});*/
 
 		// Sombra del panel Navigation Drawer
 		drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
@@ -144,7 +161,7 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
- 
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (toggle.onOptionsItemSelected(item)) {
@@ -152,7 +169,7 @@ public class MainActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+ 
 	// Activamos el toggle con el icono
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
@@ -164,5 +181,61 @@ public class MainActivity extends Activity {
         File file = new File(Environment.getExternalStorageDirectory(), MAPFILE);
         return file;
     }
+	
+	//---------------------------Menu lateral---------------------------
+	public void setGroupData() {
+		groupItem.add("Datos Generales");
+		groupItem.add("Información de Vivienda");
+		groupItem.add("Riesgo o Vulnerabilidad");
+		groupItem.add("BBLB");
+	}
+
+	public void setChildGroupData() {
+		/**
+		 * Sub ítems para Datos Generales
+		 */
+		child = new ArrayList<String>();
+		child.add("Jefe de Familia");
+		child.add("Minicipio");
+		child.add("Departamento");
+		child.add("Etc");
+		childItem.add(child);
+
+		/**
+		 * Sub íyems para Información Vivienda
+		 */
+		child = new ArrayList<String>();
+		child.add("Material de Techo");
+		child.add("Material Piso");
+		child.add("Estado Vivienda");
+		childItem.add(child);
+		
+		/**
+		 * Sub ítems para Riesgo o Vulnerabilidad
+		 */
+		
+		child = new ArrayList<String>();
+		child.add("Alto");
+		child.add("Bajo");
+		child.add("Medio");		
+		childItem.add(child);
+		
+		/**
+		 * Sub ítems para BLBB
+		 */
+		child = new ArrayList<String>();
+		child.add("Este menú");
+		child.add("No es lollipop");
+		child.add("Pero me Vale");
+		child.add("Solamente");
+		childItem.add(child);
+	}
+	
+	public boolean onChildClick(ExpandableListView parent, View v,
+			int groupPosition, int childPosition, long id) {
+		Toast.makeText(this, "Seleccionó:" + v.getTag(),
+				Toast.LENGTH_SHORT).show();
+		return true;
+	}	
 
 }
