@@ -8,15 +8,19 @@ import android.location.LocationListener;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import org.mapsforge.map.android.view.MapView;
+
 /* Clase My Location Listener */
 public class MyLocationListener implements LocationListener{
 	
 	private Context ctx;
 	private MyMarker mrk;
+	private MapView mapView;
 	 
-	public MyLocationListener(Context ctx, MyMarker mrk) {
+	public MyLocationListener(Context ctx, MyMarker mrk, MapView mapView) {
 		this.ctx = ctx;
 		this.mrk = mrk;
+		this.mapView = mapView;
 	}
 
 	@Override
@@ -25,6 +29,7 @@ public class MyLocationListener implements LocationListener{
 		loc.getLongitude();
 		mrk.setLatLong(new LatLong(loc.getLatitude(), loc.getLongitude()));
 		Toast.makeText(ctx, "Lat: "+ loc.getLatitude() +"|| Long: "+ loc.getLongitude(), Toast.LENGTH_SHORT).show();
+		mapView.getLayerManager().redrawLayers(); 
 	}
 
 	@Override

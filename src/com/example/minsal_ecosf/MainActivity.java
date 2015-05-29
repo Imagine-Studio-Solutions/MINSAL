@@ -150,7 +150,7 @@ public class MainActivity extends Activity {
 		//---------------------------------GPS----------------------------------
 		/* usando la clase LocationManager para obtener informacion GPS*/
 		LocationManager mlocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-		LocationListener mlocListener = new MyLocationListener(this, marker);
+		LocationListener mlocListener = new MyLocationListener(this, marker, mapView);
 		mlocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 0, 0, mlocListener);
 		//----------------------------------------------------------------------
 	}
