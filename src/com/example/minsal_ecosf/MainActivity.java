@@ -81,7 +81,7 @@ public class MainActivity extends Activity {
 		// only once a layer is associated with a mapView the rendering starts
 		mapView.getLayerManager().getLayers().add(tileRendererLayer);
 
-		mapView.setBuiltInZoomControls(true);
+		mapView.setBuiltInZoomControls(false);
 		mapView.getMapScaleBar().setVisible(true);
  
 		mapView.getModel().mapViewPosition.setCenter(new LatLong(13.8330795,-89.9347687));//punto inical del mapa

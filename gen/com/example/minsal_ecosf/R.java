@@ -20,26 +20,37 @@ public final class R {
          */
         public static final int activity_horizontal_margin=0x7f040000;
         public static final int activity_vertical_margin=0x7f040001;
+        public static final int elevation_high=0x7f040006;
+        public static final int elevation_low=0x7f040005;
+        public static final int fab_button_diameter=0x7f040002;
+        public static final int fab_button_margin_bottom=0x7f040003;
+        public static final int fab_button_margin_right=0x7f040004;
     }
     public static final class drawable {
         public static final int drawer_shadow=0x7f020000;
-        public static final int green_house=0x7f020001;
-        public static final int ic_drawer=0x7f020002;
-        public static final int ic_launcher=0x7f020003;
-        public static final int pointer1=0x7f020004;
-        public static final int pointer2=0x7f020005;
-        public static final int pointer3=0x7f020006;
-        public static final int pointer4=0x7f020007;
+        public static final int fab_ic_add=0x7f020001;
+        public static final int fab_shape=0x7f020002;
+        public static final int green_house=0x7f020003;
+        public static final int ic_drawer=0x7f020004;
+        public static final int ic_launcher=0x7f020005;
+        public static final int pointer1=0x7f020006;
+        public static final int pointer2=0x7f020007;
+        public static final int pointer3=0x7f020008;
+        public static final int pointer4=0x7f020009;
     }
     public static final class id {
-        public static final int action_settings=0x7f080004;
-        public static final int drawer=0x7f080003;
+        public static final int action_settings=0x7f080007;
+        public static final int drawer=0x7f080004;
         public static final int drawer_layout=0x7f080000;
+        public static final int fab_image_button=0x7f080003;
+        public static final int list_item=0x7f080005;
+        public static final int list_item_text_view=0x7f080006;
         public static final int mapView=0x7f080002;
         public static final int texto=0x7f080001;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
+        public static final int list_item=0x7f030001;
     }
     public static final class menu {
         public static final int main=0x7f070000;
