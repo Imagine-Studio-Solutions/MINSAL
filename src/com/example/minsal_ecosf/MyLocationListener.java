@@ -15,6 +15,8 @@ public class MyLocationListener implements LocationListener{
 	private Context ctx;
 	private MyMarker mrk;
 	private MapView mapView;
+	private double latitud;
+	private double longitud;
 	 
 	public MyLocationListener(Context ctx, MyMarker mrk, MapView mapView) {
 		this.ctx = ctx;
@@ -24,10 +26,10 @@ public class MyLocationListener implements LocationListener{
 
 	@Override
 	public void onLocationChanged(Location loc){
-		loc.getLatitude();
-		loc.getLongitude();
+		latitud = loc.getLatitude();
+		longitud = loc.getLongitude();
 		mrk.setLatLong(new LatLong(loc.getLatitude(), loc.getLongitude()));
-		Toast.makeText(ctx, "Lat: "+ loc.getLatitude() +"|| Long: "+ loc.getLongitude(), Toast.LENGTH_SHORT).show();
+		Toast.makeText(ctx, "GPS actualizado", Toast.LENGTH_SHORT).show();
 		mapView.getLayerManager().redrawLayers(); 
 	}
 
@@ -45,5 +47,9 @@ public class MyLocationListener implements LocationListener{
 	public void onStatusChanged(String provider, int status, Bundle extras)
 	{
 
+	}
+	
+	public void onFocusMapPosition (){
+		mapView.getModel().mapViewPosition.setCenter(new LatLong(latitud,longitud));
 	}
 }

@@ -29,9 +29,10 @@ import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 import android.content.Context;
-import android.location.LocationListener;
+//import android.location.LocationListener;
 import android.location.LocationManager;
 
+import android.widget.ImageButton;
 
 public class MainActivity extends Activity {
  
@@ -150,9 +151,20 @@ public class MainActivity extends Activity {
 		//---------------------------------GPS----------------------------------
 		/* usando la clase LocationManager para obtener informacion GPS*/
 		LocationManager mlocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-		LocationListener mlocListener = new MyLocationListener(this, marker, mapView);
+		final MyLocationListener mlocListener = new MyLocationListener(this, marker, mapView);
 		mlocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 0, 0, mlocListener);
 		//----------------------------------------------------------------------
+		
+		//para click del boton FAB
+		ImageButton fabImageButton = (ImageButton) findViewById(R.id.fab_image_button);
+		
+	    fabImageButton.setOnClickListener(new View.OnClickListener() {
+	        @Override
+	        public void onClick(View v) {
+	        	//Toast.makeText(MainActivity.this, "Click en el boton de GPS", Toast.LENGTH_SHORT).show();
+	        	mlocListener.onFocusMapPosition ();
+	        }
+	    });
 	}
  
 	@Override
@@ -236,6 +248,8 @@ public class MainActivity extends Activity {
 		Toast.makeText(this, "Seleccionó:" + v.getTag(),
 				Toast.LENGTH_SHORT).show();
 		return true;
-	}	
+	}
+	
+
 
 }
