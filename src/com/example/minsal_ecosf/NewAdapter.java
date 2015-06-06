@@ -50,6 +50,8 @@ public class NewAdapter extends BaseExpandableListAdapter {
 		}
 		text = (TextView) convertView;
 		text.setText("\t"+tempChild.get(childPosition));
+		text.setTextSize(16);
+		text.setPadding(40, 5, 0, 5);
 //		convertView.setOnClickListener(new OnClickListener() {
 //			@Override
 //			public void onClick(View v) {
@@ -100,6 +102,8 @@ public class NewAdapter extends BaseExpandableListAdapter {
 			convertView = new TextView(context);
 		}
 		((TextView) convertView).setText(groupItem.get(groupPosition));
+		((TextView) convertView).setTextSize(18);
+		((TextView) convertView).setPadding(40, 5, 0, 5);
 		convertView.setTag(groupItem.get(groupPosition));
 		return convertView;
 	}

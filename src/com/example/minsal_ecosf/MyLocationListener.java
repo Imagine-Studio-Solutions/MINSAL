@@ -50,6 +50,9 @@ public class MyLocationListener implements LocationListener{
 	}
 	
 	public void onFocusMapPosition (){
-		mapView.getModel().mapViewPosition.setCenter(new LatLong(latitud,longitud));
+		if (latitud != 0 && longitud != 0)
+			mapView.getModel().mapViewPosition.setCenter(new LatLong(latitud,longitud));
+		else
+			mapView.getModel().mapViewPosition.setCenter(new LatLong(13.6801783,-89.231388));
 	}
 }

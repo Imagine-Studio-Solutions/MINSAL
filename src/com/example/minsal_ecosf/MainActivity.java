@@ -42,10 +42,8 @@ public class MainActivity extends Activity {
 	
 	//---------------------Menu lateral-------------------------
 	private DrawerLayout drawerLayout;
-	//private ListView drawer;
 	private ExpandableListView drawerList;
 	private ActionBarDrawerToggle toggle;
-	//private static final String[] opciones = {"Datos Generales", "Infomación de Vivienda", "Riesgo o Vulnerabilidad","BBLB"};
 	ArrayList<String> groupItem = new ArrayList<String>();
 	ArrayList<Object> childItem = new ArrayList<Object>();
 	ArrayList<String> child;
@@ -85,9 +83,9 @@ public class MainActivity extends Activity {
 		mapView.setBuiltInZoomControls(false);
 		mapView.getMapScaleBar().setVisible(true);
  
-		mapView.getModel().mapViewPosition.setCenter(new LatLong(13.8330795,-89.9347687));//punto inical del mapa
+		mapView.getModel().mapViewPosition.setCenter(new LatLong(13.6801783,-89.231388));//punto inical del mapa
  
-		MyMarker marker = new MyMarker(this, new LatLong(13.8330795,-89.9347687), AndroidGraphicFactory.convertToBitmap(getResources().getDrawable(R.drawable.pointer4)), 0, 0);
+		MyMarker marker = new MyMarker(this, new LatLong(13.6801783,-89.231388), AndroidGraphicFactory.convertToBitmap(getResources().getDrawable(R.drawable.pointer4)), 0, 0, mapView);
 		mapView.getLayerManager().getLayers().add(marker);
 		//-------------------------------------Menu lateral-----------------------------------
 		// Rescatamos el Action Bar y activamos el boton Home
@@ -196,56 +194,43 @@ public class MainActivity extends Activity {
 	
 	//---------------------------Menu lateral---------------------------
 	public void setGroupData() {
-		groupItem.add("Datos Generales");
-		groupItem.add("Información de Vivienda");
-		groupItem.add("Riesgo o Vulnerabilidad");
-		groupItem.add("BBLB");
+		groupItem.add("Familia");
+		groupItem.add("Miembros");
 	}
 
 	public void setChildGroupData() {
 		/**
-		 * Sub ítems para Datos Generales
+		 * Sub ítems para Familia
 		 */
 		child = new ArrayList<String>();
-		child.add("Jefe de Familia");
-		child.add("Minicipio");
-		child.add("Departamento");
-		child.add("Etc");
+		child.add("Generalidades");
+		child.add("Vivienda");
+		child.add("Patrimonio");
+		child.add("Amenazas");
+		child.add("Servicios basicos");
+		child.add("Desechos");
+		child.add("Vectores");
+		child.add("Mascotas");
+		child.add("Riesgo familiar");
 		childItem.add(child);
 
 		/**
-		 * Sub íyems para Información Vivienda
+		 * Sub íyems para Miembro
 		 */
 		child = new ArrayList<String>();
-		child.add("Material de Techo");
-		child.add("Material Piso");
-		child.add("Estado Vivienda");
-		childItem.add(child);
-		
-		/**
-		 * Sub ítems para Riesgo o Vulnerabilidad
-		 */
-		
-		child = new ArrayList<String>();
-		child.add("Alto");
-		child.add("Bajo");
-		child.add("Medio");		
-		childItem.add(child);
-		
-		/**
-		 * Sub ítems para BLBB
-		 */
-		child = new ArrayList<String>();
-		child.add("Este menú");
-		child.add("No es lollipop");
-		child.add("Pero me Vale");
-		child.add("Solamente");
+		child.add("Generalidades");
+		child.add("Educacion");
+		child.add("Economia");
+		child.add("Salud");
+		child.add("Habitos");
+		child.add("Salud sexual");
+		child.add("Otras variables");
 		childItem.add(child);
 	}
 	
 	public boolean onChildClick(ExpandableListView parent, View v,
 			int groupPosition, int childPosition, long id) {
-		Toast.makeText(this, "Seleccionó:" + v.getTag(),
+				Toast.makeText(this, "Seleccionó:" + v.getTag(),
 				Toast.LENGTH_SHORT).show();
 		return true;
 	}
