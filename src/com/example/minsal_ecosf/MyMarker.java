@@ -16,13 +16,16 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.TextView;
-import android.widget.Toast;
 
+
+@SuppressLint("NewApi")
 public class MyMarker extends Marker{
 	private Context ctx;
 	private MapView mapView;
 	private Bitmap bubble;
-	 
+	private Boolean tapped = false;
+	private Marker markerBubble;
+
 	public MyMarker(Context ctx, LatLong latLong, Bitmap bitmap, int horizontalOffset,
 			int verticalOffset, MapView mapView) {
 		super(latLong, bitmap, horizontalOffset, verticalOffset);
@@ -31,32 +34,38 @@ public class MyMarker extends Marker{
 	}
 	@Override
 	public boolean onTap(LatLong tapLatLong, Point layerXY, Point tapXY) {
-		if (this.contains(layerXY, tapXY)) {
-//			TextView bubbleView = new TextView(ctx);
-//			setBackground(bubbleView, R.drawable.balloon_overlay_unfocused);
-//			bubbleView.setGravity(Gravity.CENTER);
-//			bubbleView.setMaxEms(20);
-//			bubbleView.setTextSize(15);
-//			bubbleView.setTextColor(Color.BLACK);
-//			bubbleView.setText("Latitud: " + tapLatLong.latitude + " , Longitud: " + tapLatLong.longitude);
-//			bubble = viewToBitmap(ctx, bubbleView);
-//			bubble.incrementRefCount();
-//			mapView.getLayerManager().getLayers().add(new Marker(tapLatLong, bubble, 0, -bubble.getHeight() / 2));
-			Toast.makeText(ctx, "Mostrar popup" , Toast.LENGTH_SHORT).show();
-		return true;
-	}
+		if (this.contains(layerXY, tapXY) && !tapped) {
+			TextView bubbleView = new TextView(ctx);
+			setBackground(bubbleView, ctx.getResources().getDrawable(R.drawable.balloon_overlay_unfocused));
+			bubbleView.setGravity(Gravity.CENTER);
+			bubbleView.setMaxEms(20);
+			bubbleView.setTextSize(15);
+			bubbleView.setTextColor(Color.BLACK);
+			bubbleView.setText("Linea 1 \n Linea 2 \n Linea 3 \n");
+			bubble = viewToBitmap(ctx, bubbleView);
+			bubble.incrementRefCount();
+			markerBubble = new Marker(tapLatLong, bubble, 0, -bubble.getHeight() / 2);
+			mapView.getLayerManager().getLayers().add(markerBubble);
+			tapped = !tapped;
+			return true;
+		}else{
+			mapView.getLayerManager().getLayers().remove(markerBubble);
+		}
+		tapped = !tapped;
 		return super.onTap(tapLatLong, layerXY, tapXY);
 	}
 	
-	//@SuppressWarnings("deprecation")
+	@SuppressWarnings("deprecation")
 	@SuppressLint("NewApi")
-	public static void setBackground(View view, int background) {
-		if (android.os.Build.VERSION.SDK_INT >= 16) {
-			view.setBackgroundResource(background);
-		} else {
-			view.setBackgroundResource(background);
+	public static void setBackground(View view, Drawable background) {
+		if (background == null) {
+			
 		}
-		
+		if (android.os.Build.VERSION.SDK_INT >= 16) {
+			view.setBackground(background);
+		} else {
+			view.setBackgroundDrawable(background);
+		}
 	}
 	
 	static Bitmap viewToBitmap(Context c, View view) {
