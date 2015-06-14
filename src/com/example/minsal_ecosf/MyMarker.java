@@ -16,6 +16,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 @SuppressLint("NewApi")
@@ -34,6 +35,7 @@ public class MyMarker extends Marker{
 	}
 	@Override
 	public boolean onTap(LatLong tapLatLong, Point layerXY, Point tapXY) {
+		//Toast.makeText(ctx, "SHOW ON TAP", Toast.LENGTH_SHORT).show();
 		if (this.contains(layerXY, tapXY) && !tapped) {
 			TextView bubbleView = new TextView(ctx);
 			setBackground(bubbleView, ctx.getResources().getDrawable(R.drawable.balloon_overlay_unfocused));
@@ -47,12 +49,14 @@ public class MyMarker extends Marker{
 			markerBubble = new Marker(tapLatLong, bubble, 0, -bubble.getHeight() / 2);
 			mapView.getLayerManager().getLayers().add(markerBubble);
 			tapped = !tapped;
+			super.onTap(tapLatLong, layerXY, tapXY);
 			return true;
-		}else{
+		}else if (this.contains(layerXY, tapXY) && tapped) {
 			mapView.getLayerManager().getLayers().remove(markerBubble);
-		}
-		tapped = !tapped;
-		return super.onTap(tapLatLong, layerXY, tapXY);
+			tapped = !tapped;
+			return true;
+		}else
+			return false;
 	}
 	
 	@SuppressWarnings("deprecation")

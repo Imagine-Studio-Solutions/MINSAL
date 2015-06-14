@@ -57,7 +57,8 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		AndroidGraphicFactory.createInstance(getApplication());
 		setContentView(R.layout.activity_main);
- 
+		
+		
 		mapView = (MapView)findViewById(R.id.mapView);
 		mapView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
  
@@ -85,8 +86,24 @@ public class MainActivity extends Activity {
  
 		mapView.getModel().mapViewPosition.setCenter(new LatLong(13.6801783,-89.231388));//punto inical del mapa
  
-		MyMarker marker = new MyMarker(this, new LatLong(13.6801783,-89.231388), AndroidGraphicFactory.convertToBitmap(getResources().getDrawable(R.drawable.pointer4)), 0, 0, mapView);
+		MyMarker marker = new MyMarker(this, new LatLong(13.6801783,-89.231388), AndroidGraphicFactory.convertToBitmap(getResources().getDrawable(R.drawable.pointer)), 0, 0, mapView);
 		mapView.getLayerManager().getLayers().add(marker);
+		
+		//------------------------------------------------------------------------------------
+		
+		//Instancio la clase del manejador de la BASE DE DATOS.
+		Handler_sqlite manejador = new Handler_sqlite(this, mapView);
+        
+		manejador.abrir();
+		manejador.insertarFicha(1,13.6801783,-89.136031);
+		
+		
+		String[] x = manejador.leer();
+		Toast.makeText(this, "Datos:" + x[0],
+				Toast.LENGTH_SHORT).show();
+		manejador.cerrar();
+
+		
 		//-------------------------------------Menu lateral-----------------------------------
 		// Rescatamos el Action Bar y activamos el boton Home
 		getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -149,10 +166,12 @@ public class MainActivity extends Activity {
 		//---------------------------------GPS----------------------------------
 		/* usando la clase LocationManager para obtener informacion GPS*/
 		LocationManager mlocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-		final MyLocationListener mlocListener = new MyLocationListener(this, marker, mapView);
-		mlocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 0, 0, mlocListener);
+		final MyLocationListener mlocListener = new MyLocationListener(this, marker, mapView, mlocManager);
+		//mlocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 0, 0, mlocListener);
 		//----------------------------------------------------------------------
-		
+		 if(!mlocListener.canGetLocation()){
+			 mlocListener.showSettingsAlert();
+		 }
 		//para click del boton FAB
 		ImageButton fabImageButton = (ImageButton) findViewById(R.id.fab_image_button);
 		
