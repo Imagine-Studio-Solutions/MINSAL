@@ -35,10 +35,13 @@ public final class R {
         public static final int green_house=0x7f020005;
         public static final int ic_drawer=0x7f020006;
         public static final int ic_launcher=0x7f020007;
-        public static final int pointer=0x7f020008;
+        public static final int info_window=0x7f020008;
+        public static final int pointer=0x7f020009;
     }
     public static final class id {
-        public static final int action_settings=0x7f080007;
+        public static final int action_settings=0x7f080009;
+        public static final int bSearch=0x7f080008;
+        public static final int contenido=0x7f080007;
         public static final int drawer=0x7f080004;
         public static final int drawer_layout=0x7f080000;
         public static final int fab_image_button=0x7f080003;

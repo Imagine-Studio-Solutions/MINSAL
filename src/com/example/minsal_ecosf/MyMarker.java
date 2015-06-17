@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.TextView;
@@ -35,18 +36,19 @@ public class MyMarker extends Marker{
 	}
 	@Override
 	public boolean onTap(LatLong tapLatLong, Point layerXY, Point tapXY) {
-		//Toast.makeText(ctx, "SHOW ON TAP", Toast.LENGTH_SHORT).show();
 		if (this.contains(layerXY, tapXY) && !tapped) {
-			TextView bubbleView = new TextView(ctx);
+			LayoutInflater inflater = (LayoutInflater) ctx.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+			View bubbleView = inflater.inflate(R.drawable.info_window, null);
+			TextView textArea = (TextView) bubbleView.findViewById( R.id.contenido );
 			setBackground(bubbleView, ctx.getResources().getDrawable(R.drawable.balloon_overlay_unfocused));
-			bubbleView.setGravity(Gravity.CENTER);
-			bubbleView.setMaxEms(20);
-			bubbleView.setTextSize(15);
-			bubbleView.setTextColor(Color.BLACK);
-			bubbleView.setText("Linea 1 \n Linea 2 \n Linea 3 \n");
+			textArea.setGravity(Gravity.CENTER);
+			textArea.setMaxEms(20);
+			textArea.setTextSize(18);
+			textArea.setTextColor(Color.BLACK);
+			textArea.setText("Id Ficha Familiar: 00234596-5 \nJefe de Familia: Pedro Suarez \n");
 			bubble = viewToBitmap(ctx, bubbleView);
 			bubble.incrementRefCount();
-			markerBubble = new Marker(tapLatLong, bubble, 0, -bubble.getHeight() / 2);
+			markerBubble = new Marker(tapLatLong, bubble, 0, -bubble.getHeight() + 15);
 			mapView.getLayerManager().getLayers().add(markerBubble);
 			tapped = !tapped;
 			super.onTap(tapLatLong, layerXY, tapXY);

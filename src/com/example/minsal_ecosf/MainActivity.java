@@ -29,6 +29,7 @@ import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 import android.content.Context;
+import android.database.Cursor;
 //import android.location.LocationListener;
 import android.location.LocationManager;
 
@@ -47,6 +48,13 @@ public class MainActivity extends Activity {
 	ArrayList<String> groupItem = new ArrayList<String>();
 	ArrayList<Object> childItem = new ArrayList<Object>();
 	ArrayList<String> child;
+	//Para el menú usando BD
+	private DBHelper BD;
+	//Para nivel 1
+	private Cursor c;
+	//Para subítems
+	private Cursor c2;	
+
 	//----------------------------------------------------------
 	
 	private static final String MAPFILE = "/maps/elsalvador.map";
@@ -104,14 +112,18 @@ public class MainActivity extends Activity {
 		manejador.cerrar();
 
 		
+		
+		
 		//-------------------------------------Menu lateral-----------------------------------
 		// Rescatamos el Action Bar y activamos el boton Home
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
 
 		// Declarar e inicializar componentes para el Navigation Drawer
-		setGroupData();
-		setChildGroupData();	
+		//setGroupData();
+		creaMenu();
+		crearSubmenu();
+		//setChildGroupData();	
 				
 		//drawer = (ListView) findViewById(R.id.drawer);
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -212,16 +224,98 @@ public class MainActivity extends Activity {
     }
 	
 	//---------------------------Menu lateral---------------------------
-	public void setGroupData() {
+	
+	//Para el menú
+	public void creaMenu(){
+		BD=new DBHelper(this);
+		BD.open();		
+		
+		c = BD.getReadableDatabase().rawQuery("SELECT descripciondescriptor,iddescriptor " +
+				"FROM descriptor, variable " +
+				"WHERE variable.tipo_referente ='c' " +
+				"AND descriptor.iddescriptor = variable.id_descriptor " +
+				"ORDER BY descriptor.descripciondescriptor ASC", null);			
+						
+		try{
+			if(c.moveToFirst()){
+				do{
+					//Armar el menú
+					
+					//Acá se colocan las primeras opciones (nivel 1)
+					
+					if(!(c.getString(0).equals("Valores Si y No"))&&!(c.getString(0).equals("Valores Si,No y No aplica")) && !(c.getString(0).equals("Valores Si,No y No dato"))){
+						groupItem.add(c.getString(0));				
+					}	
+					
+				}while (c.moveToNext());
+			
+			}
+		}
+		catch(Exception e){		
+			
+		}
+			
+}
+	
+	
+public void crearSubmenu(){
+	BD=new DBHelper(this);
+	BD.open();
+	
+	try{
+		if(c.moveToFirst()){
+			do{
+							
+				if(!(c.getString(0).equals("Valores Si y No"))&&!(c.getString(0).equals("Valores Si,No y No aplica")) && !(c.getString(0).equals("Valores Si,No y No dato"))){
+
+					//Para agregar los submenú
+					c2= BD.getReadableDatabase().rawQuery("SELECT descripcion " +
+							"FROM descriptor, valordescriptor, variable " +
+							"WHERE descriptor.iddescriptor = valordescriptor.id_descriptor " +
+							"AND variable.tipo_referente ='c' " +
+							"AND descriptor.iddescriptor = variable.id_descriptor " +
+							"AND descriptor.iddescriptor = " + c.getString(1) +
+							" ORDER BY descriptor.descripciondescriptor ASC", null);
+					try{
+						if(c2.moveToFirst()){
+							child = new ArrayList<String>();
+							do{
+								child.add(c2.getString(0));
+							}while(c2.moveToNext());
+							childItem.add(child);
+						}
+					}
+					catch (Exception e){
+						
+					}
+		
+				}	
+				
+			}while (c.moveToNext());
+		
+		}
+	}
+	catch(Exception e){		
+		
+	}
+	
+	
+	
+	
+}
+	
+	
+	/*public void setGroupData() {
 		groupItem.add("Familia");
 		groupItem.add("Miembros");
 	}
+	*/
 
-	public void setChildGroupData() {
+// public void setChildGroupData() {
 		/**
 		 * Sub ítems para Familia
 		 */
-		child = new ArrayList<String>();
+		/*child = new ArrayList<String>();
 		child.add("Generalidades");
 		child.add("Vivienda");
 		child.add("Patrimonio");
@@ -231,11 +325,12 @@ public class MainActivity extends Activity {
 		child.add("Vectores");
 		child.add("Mascotas");
 		child.add("Riesgo familiar");
-		childItem.add(child);
+		childItem.add(child); */
 
 		/**
 		 * Sub íyems para Miembro
 		 */
+	/*
 		child = new ArrayList<String>();
 		child.add("Generalidades");
 		child.add("Educacion");
@@ -246,7 +341,7 @@ public class MainActivity extends Activity {
 		child.add("Otras variables");
 		childItem.add(child);
 	}
-	
+	*/
 	public boolean onChildClick(ExpandableListView parent, View v,
 			int groupPosition, int childPosition, long id) {
 				Toast.makeText(this, "Seleccionó:" + v.getTag(),
