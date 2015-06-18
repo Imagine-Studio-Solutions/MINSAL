@@ -12,11 +12,21 @@
         android:textStyle="bold" />
     
     <Button
-	    android:id="@+id/bSearch"
+	    android:id="@+id/bCrearFicha"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:padding="8dp"
 	    android:text="Crear ficha"
-	    android:drawableLeft="@android:drawable/ic_menu_search"
+	    android:drawableLeft="@drawable/add"
 	    android:textSize="18sp"/>
+    
+    <Button
+	    android:id="@+id/bVerFicha"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:padding="8dp"
+	    android:text="Ver detalle ficha"
+	    android:drawableLeft="@drawable/column_one"
+	    android:textSize="18sp"/>
+
 </LinearLayout>

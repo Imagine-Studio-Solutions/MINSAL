@@ -16,9 +16,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.MeasureSpec;
+import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
 
 @SuppressLint("NewApi")
 public class MyMarker extends Marker{
@@ -27,25 +26,40 @@ public class MyMarker extends Marker{
 	private Bitmap bubble;
 	private Boolean tapped = false;
 	private Marker markerBubble;
+	private String content;
+	private Button crearFicha;
+	private Button verFicha;
+	private boolean gpsPointer;
 
 	public MyMarker(Context ctx, LatLong latLong, Bitmap bitmap, int horizontalOffset,
-			int verticalOffset, MapView mapView) {
+			int verticalOffset, MapView mapView, String bubbleContent, boolean gpsPointer) {
 		super(latLong, bitmap, horizontalOffset, verticalOffset);
 		this.ctx = ctx;
 		this.mapView = mapView;
+		content = bubbleContent;
+		this.gpsPointer = gpsPointer; 
 	}
 	@Override
 	public boolean onTap(LatLong tapLatLong, Point layerXY, Point tapXY) {
 		if (this.contains(layerXY, tapXY) && !tapped) {
 			LayoutInflater inflater = (LayoutInflater) ctx.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
 			View bubbleView = inflater.inflate(R.drawable.info_window, null);
+			crearFicha = (Button) bubbleView.findViewById(R.id.bCrearFicha);    
+			verFicha = (Button) bubbleView.findViewById(R.id.bVerFicha);
+			if (gpsPointer){
+				crearFicha.setVisibility(View.VISIBLE);
+		     	verFicha.setVisibility(View.GONE);
+			} else {
+				crearFicha.setVisibility(View.GONE);
+		     	verFicha.setVisibility(View.VISIBLE);
+			}
 			TextView textArea = (TextView) bubbleView.findViewById( R.id.contenido );
 			setBackground(bubbleView, ctx.getResources().getDrawable(R.drawable.balloon_overlay_unfocused));
 			textArea.setGravity(Gravity.CENTER);
 			textArea.setMaxEms(20);
 			textArea.setTextSize(18);
 			textArea.setTextColor(Color.BLACK);
-			textArea.setText("Id Ficha Familiar: 00234596-5 \nJefe de Familia: Pedro Suarez \n");
+			textArea.setText(content);
 			bubble = viewToBitmap(ctx, bubbleView);
 			bubble.incrementRefCount();
 			markerBubble = new Marker(tapLatLong, bubble, 0, -bubble.getHeight() + 15);

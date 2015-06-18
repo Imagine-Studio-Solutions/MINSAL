@@ -71,7 +71,8 @@ public class Handler_sqlite extends SQLiteOpenHelper{
 			
 			result[contador] = c.getString(id)+ "  " + c.getString(ilat)+ "  " + c.getString(ilong) + "\n";
 			Bitmap pointer = AndroidGraphicFactory.convertToBitmap(ctx.getResources().getDrawable(R.drawable.green_house));
-			MyMarker marker = new MyMarker(ctx, new LatLong(Double.parseDouble(c.getString(ilat)),Double.parseDouble(c.getString(ilong))), pointer, 0, 0, mapView);
+			String bubbleContent = "Id de ficha: 097896-456-12\nJefe de Familia: Pedro Perez";
+			MyMarker marker = new MyMarker(ctx, new LatLong(Double.parseDouble(c.getString(ilat)),Double.parseDouble(c.getString(ilong))), pointer, 0, 0, mapView, bubbleContent, false);
 			mapView.getLayerManager().getLayers().add(marker);
 		}
 		

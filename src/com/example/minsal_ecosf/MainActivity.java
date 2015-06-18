@@ -94,7 +94,7 @@ public class MainActivity extends Activity {
  
 		mapView.getModel().mapViewPosition.setCenter(new LatLong(13.6801783,-89.231388));//punto inical del mapa
  
-		MyMarker marker = new MyMarker(this, new LatLong(13.6801783,-89.231388), AndroidGraphicFactory.convertToBitmap(getResources().getDrawable(R.drawable.pointer)), 0, 0, mapView);
+		MyMarker marker = new MyMarker(this, new LatLong(13.6801783,-89.231388), AndroidGraphicFactory.convertToBitmap(getResources().getDrawable(R.drawable.pointer)), 0, 0, mapView, "Posicion actual del equipo", true);
 		mapView.getLayerManager().getLayers().add(marker);
 		
 		//------------------------------------------------------------------------------------
